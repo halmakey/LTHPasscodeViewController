@@ -765,7 +765,9 @@
         }
         
 		if (animated) {
+            self.view.alpha = 0;
 			[UIView animateWithDuration: _lockAnimationDuration animations: ^{
+                self.view.alpha = 1;
 				self.view.center = newCenter;
 			}];
 		}

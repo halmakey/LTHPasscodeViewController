@@ -328,6 +328,10 @@
  */
 + (void)useKeychain:(BOOL)useKeychain;
 /**
+ @brief Ignore switching App.
+ */
++ (void)ignoreSwitchingApp:(BOOL)ignore;
+/**
  @brief  Returns the shared instance of the passcode view controller.
  */
 + (instancetype)sharedUser;

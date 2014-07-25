@@ -47,6 +47,7 @@
 @property (nonatomic, assign) CGFloat     iPhoneHorizontalGap;
 
 @property (nonatomic, assign) BOOL        usesKeychain;
+@property (nonatomic, assign) BOOL        ignoreSwitchingApp;
 @property (nonatomic, assign) BOOL        displayedAsModal;
 @property (nonatomic, assign) BOOL        displayedAsLockScreen;
 @property (nonatomic, assign) BOOL        isCurrentlyOnScreen;
@@ -114,10 +115,19 @@
     [[LTHPasscodeViewController sharedUser] _useKeychain:useKeychain];
 }
 
++ (void)ignoreSwitchingApp:(BOOL)ignore
+{
+    [[LTHPasscodeViewController sharedUser] _ignoreSwitchingApp:ignore];
+}
+
 
 #pragma mark - Private methods
 - (void)_useKeychain:(BOOL)useKeychain {
     _usesKeychain = useKeychain;
+}
+
+- (void)_ignoreSwitchingApp:(BOOL)ignore {
+    _ignoreSwitchingApp = ignore;
 }
 
 
@@ -1242,6 +1252,9 @@
 
 #pragma mark - Notification Observers
 - (void)_applicationDidEnterBackground {
+    if (_ignoreSwitchingApp) {
+        return;
+    }
 	if ([self _doesPasscodeExist]) {
 		if ([_passcodeTextField isFirstResponder]) [_passcodeTextField resignFirstResponder];
 		// Without animation because otherwise it won't come down fast enough,
@@ -1266,11 +1279,17 @@
 
 
 - (void)_applicationDidBecomeActive {
+    if (_ignoreSwitchingApp) {
+        return;
+    }
 	_coverView.hidden = YES;
 }
 
 
 - (void)_applicationWillEnterForeground {
+    if (_ignoreSwitchingApp) {
+        return;
+    }
 	if ([self _doesPasscodeExist] &&
 		[self _didPasscodeTimerEnd]) {
         // This is here instead of didEnterBackground because when self is pushed
@@ -1294,6 +1313,9 @@
 
 
 - (void)_applicationWillResignActive {
+    if (_ignoreSwitchingApp) {
+        return;
+    }
 	if ([self _doesPasscodeExist]) {
 		[self _saveTimerStartTime];
 	}

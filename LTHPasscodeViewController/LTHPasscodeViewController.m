@@ -1227,6 +1227,10 @@
     return _isSimple;
 }
 
+- (void)cancel {
+    [self _cancelAndDismissMe];
+}
+
 #pragma mark - Notification Observers
 - (void)_applicationDidEnterBackground {
 	if ([self _doesPasscodeExist]) {

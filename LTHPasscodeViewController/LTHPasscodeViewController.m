@@ -1231,7 +1231,11 @@
 }
 
 - (void)cancel {
-    [self _cancelAndDismissMe];
+    if (_displayedAsLockScreen) {
+        [self _dismissMe];
+    } else {
+        [self _cancelAndDismissMe];
+    }
 }
 
 #pragma mark - Notification Observers
